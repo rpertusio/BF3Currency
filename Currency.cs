@@ -3,7 +3,6 @@
     Copyright 2010 blactionhero, via http://www.Phogue.net
 
     Modded by Athlon646464 and D33ZNUTZ over at warhawksclan.com
-	Modded by CPx4
 
     This file is part of Currency for PRoCon.
 
@@ -181,14 +180,12 @@ namespace PRoConEvents
             this.m_iAmountPaidPerHeadshot = 0;
             this.m_iSpecificWeaponPay = 0;
 
-            //RSP: her = his
-			this.m_strAutoBountyPosted = "A %amount CC$ bounty has been put on %killer's head for his %streak kill streak!";
+            this.m_strAutoBountyPosted = "A %amount CC$ bounty has been put on %killer's head for her %streak kill streak!";
             this.m_strAutoBountyCollected = "%killer has ended %victim's %streak kill streak, claiming the %amount CC$ bounty!";
             this.m_strCurrentGameMode = "";
             this.m_strPlayerBountyPostCommand = "@addbounty";
             this.m_strPlayerBountyPosted = "%poster just put a %amount CC$ bounty on %target's head!";
-            //RSP: her = his
-			this.m_strPlayerBountyCollected = "%killer just murked %victim, claiming his %amount CC$ bounty!";
+            this.m_strPlayerBountyCollected = "%killer just murked %victim, claiming her %amount CC$ bounty!";
             this.m_strBountyBoardCommand = "@bountyboard";
             this.m_strMugged = "%killer just mugged %victim, stealing %amount CC$!";
             this.m_strMuggingWeaponChosen = "";
@@ -581,8 +578,7 @@ v2.04 Final Release for BFBC2 (Dec. 30, 2010)</p>
                 lstReturn.Add(new CPluginVariable(String.Format("7. Shop Config: Item {0}|Item {0} - Cost:", item.ID), item.Cost.GetType(), item.Cost));
                 lstReturn.Add(new CPluginVariable(String.Format("7. Shop Config: Item {0}|Item {0} - Buy command:", item.ID), item.BuyCommand.GetType(), item.BuyCommand));
                 lstReturn.Add(new CPluginVariable(String.Format("7. Shop Config: Item {0}|Item {0} - Description:", item.ID), item.Description.GetType(), item.Description));
-                //RSP: Added "LogToFile" to available commands
-				lstReturn.Add(new CPluginVariable(String.Format("7. Shop Config: Item {0}|Item {0} - Add a console command to run when bought:", item.ID), "enum.AddRemoveCommandTemplate(Select a command template to add it to the list below|Say|Whisper|Yell|Growl|Move|Mute|Voice|Kill|Nuke|Kick|TempBan|PermBan|UnBan|RestartRound|NextLevel|ReserveAdd|ReserveRemove|LogToFile)", item.TemplateChosen));
+                lstReturn.Add(new CPluginVariable(String.Format("7. Shop Config: Item {0}|Item {0} - Add a console command to run when bought:", item.ID), "enum.AddRemoveCommandTemplate(Select a command template to add it to the list below|Say|Whisper|Yell|Growl|Move|Mute|Voice|Kill|Nuke|Kick|TempBan|PermBan|UnBan|RestartRound|NextLevel|ReserveAdd|ReserveRemove)", item.TemplateChosen));
                 lstReturn.Add(new CPluginVariable(String.Format("7. Shop Config: Item {0}|Item {0} -    List of console commands for Item {0}:", item.ID), typeof(string[]), item.Payload.ToArray()));
             }
 
@@ -719,8 +715,7 @@ v2.04 Final Release for BFBC2 (Dec. 30, 2010)</p>
                 lstReturn.Add(new CPluginVariable(String.Format("Item {0} - Cost:", item.ID), item.Cost.GetType(), item.Cost));
                 lstReturn.Add(new CPluginVariable(String.Format("Item {0} - Buy command:", item.ID), item.BuyCommand.GetType(), item.BuyCommand));
                 lstReturn.Add(new CPluginVariable(String.Format("Item {0} - Description:", item.ID), item.Description.GetType(), item.Description));
-                //RSP: Added "LogToFile" as available commands
-				lstReturn.Add(new CPluginVariable(String.Format("Item {0} - Add a console command to run when bought:", item.ID), "enum.AddRemoveCommandTemplate(Select a command template to add it to the list below|Say|Whisper|Yell|Growl|Move|Mute|Voice|Kill|Nuke|Kick|TempBan|PermBan|UnBan|RestartRound|NextLevel|ReserveAdd|ReserveRemove|LogToFile)", item.TemplateChosen));
+                lstReturn.Add(new CPluginVariable(String.Format("Item {0} - Add a console command to run when bought:", item.ID), "enum.AddRemoveCommandTemplate(Select a command template to add it to the list below|Say|Whisper|Yell|Growl|Move|Mute|Voice|Kill|Nuke|Kick|TempBan|PermBan|UnBan|RestartRound|NextLevel|ReserveAdd|ReserveRemove)", item.TemplateChosen));
                 lstReturn.Add(new CPluginVariable(String.Format("Item {0} -    List of console commands for Item {0}:", item.ID), typeof(string[]), item.Payload.ToArray()));
             }
 
@@ -1214,13 +1209,6 @@ v2.04 Final Release for BFBC2 (Dec. 30, 2010)</p>
                     {
                         item.Payload.Add("ReserveRemove, Player");
                     }
-					
-					//RSP: Addedto support LogFile writing (to CSV file)
-					if (strValue.Equals("LogToFile"))
-                    {
-                        item.Payload.Add("LogToFile,Logs\\PurchaseTracker.csv");
-                    }
-					
                     item.Payload.RemoveAll(string.IsNullOrEmpty);
                 }
 
@@ -2114,38 +2102,17 @@ v2.04 Final Release for BFBC2 (Dec. 30, 2010)</p>
                         }
                     }
 
-					//RSP: Removed to reduce output. Balance outputted at the end instead
-                    //this.ExecuteCommand("procon.protected.send", "admin.say", m_strCurrencyInstanceName + " shop: Below is a list of our current inventory. You have " + m_dicPlayersAndBalances[strSpeaker] + " " + m_strCurrencySymbol + ".", "player", strSpeaker);
+                    this.ExecuteCommand("procon.protected.send", "admin.say", m_strCurrencyInstanceName + " shop: Below is a list of our current inventory. You have " + m_dicPlayersAndBalances[strSpeaker] + " " + m_strCurrencySymbol + ".", "player", strSpeaker);
 
                     foreach (Item item in m_dicItemsForSale.Values)
                     {
                         if (item.Enabled == enumBoolYesNo.Yes)
                         {
-                            //RSP: Changed the way it displays.
-							// Old way:
-							// [ADMIN] : Fish Slap - 200 CC$. @FishSlap: Slap someone with a fish!
-							// [ADMIN] : Beer - 300 CC$. @GiveBeer: Give someone a beer!
-							// New way (aligned):
-							// [ADMIN] : 200 CC$ - @FishSlap - Fish Slap: Slap someone with a fish!
-							// [ADMIN] : 300 CC$ - @GiveBeer - Beer: Give someone a beer!
-							
-							// Old way:
-							//this.ExecuteCommand("procon.protected.send", "admin.say", item.Name + " - " + item.Cost + " " + m_strCurrencySymbol + ". " + item.BuyCommand + ": " + item.Description, "player", strSpeaker);
-							
-							// New way: If the Description is blank, then eliminate the ":" + description
-							if (item.Description == ""){
-									this.ExecuteCommand("procon.protected.send", "admin.say", item.Cost + " " + m_strCurrencySymbol + " - " + item.BuyCommand + " - " + item.Name, "player", strSpeaker);
-								}
-								else {
-									this.ExecuteCommand("procon.protected.send", "admin.say", item.Cost + " " + m_strCurrencySymbol + " - " + item.BuyCommand + " - " + item.Name + ": " + item.Description, "player", strSpeaker);
-								}
+                            this.ExecuteCommand("procon.protected.send", "admin.say", item.Name + " - " + item.Cost + " " + m_strCurrencySymbol + ". " + item.BuyCommand + ": " + item.Description, "player", strSpeaker);
                         }
                     }
 
-                    //RSP: Changed $command to @command, re-worded, added player's balance at the end.
-					// this.ExecuteCommand("procon.protected.send", "admin.say", m_strCurrencyInstanceName + " shop: Type a @command to buy and use that item.", "player", strSpeaker);
-					this.ExecuteCommand("procon.protected.send", "admin.say", m_strCurrencyInstanceName + " shop: Type a @command to buy an item. Your balance: " + m_dicPlayersAndBalances[strSpeaker] + " " + m_strCurrencySymbol, "player", strSpeaker);
-					
+                    this.ExecuteCommand("procon.protected.send", "admin.say", m_strCurrencyInstanceName + " shop: Type a $command to buy and use that item.", "player", strSpeaker);
                 }
 
                 if (messageWords[0].ToLower() == m_strCheckBalanceTrigger.ToLower())
@@ -2333,16 +2300,7 @@ v2.04 Final Release for BFBC2 (Dec. 30, 2010)</p>
 
                                     if (payloadFields[0].CompareTo("Say") == 0)
                                     {
-										//RSP: If no target specified, just say text and blank the "%target"
-										if (messageWords.Length < 2)
-										{
-											this.ExecuteCommand("procon.protected.send", "admin.say", payloadFields[1].Replace("%buyer", strSpeaker).Replace(" %target","").Replace("%amount", item.Cost.ToString()).Replace("%balance", m_dicPlayersAndBalances[strSpeaker].ToString()), "all");
-										}
-										else
-										{
-											this.ExecuteCommand("procon.protected.send", "admin.say", payloadFields[1].Replace("%buyer", strSpeaker).Replace("%target", BestMatchPlayerName(messageWords[1].Replace("%", " "))).Replace("%amount", item.Cost.ToString()).Replace("%balance", m_dicPlayersAndBalances[strSpeaker].ToString()), "all");
-                                        }
-	
+                                        this.ExecuteCommand("procon.protected.send", "admin.say", payloadFields[1].Replace("%buyer", strSpeaker).Replace("%target", BestMatchPlayerName(messageWords[1])).Replace("%amount", item.Cost.ToString()).Replace("%balance", m_dicPlayersAndBalances[strSpeaker].ToString()), "all");
                                         commandsSuccessful++;
                                     }
 
@@ -2422,16 +2380,8 @@ v2.04 Final Release for BFBC2 (Dec. 30, 2010)</p>
 
                                     if (payloadFields[0].CompareTo("Yell") == 0)
                                     {
-                                        //RSP: If no target specified, just yell text and blank the "%target"
-										if (messageWords.Length < 2)
-										{
-											this.ExecuteCommand("procon.protected.send", "admin.yell", payloadFields[2].Replace("%buyer", strSpeaker).Replace(" %target","").Replace("%amount", item.Cost.ToString()).Replace("%balance", m_dicPlayersAndBalances[strSpeaker].ToString()), (int.Parse(payloadFields[1]) * 1).ToString(), "all");
-										}
-										else
-										{
-											this.ExecuteCommand("procon.protected.send", "admin.yell", payloadFields[2].Replace("%buyer", strSpeaker).Replace("%target", BestMatchPlayerName(messageWords[1].Replace("%", " "))).Replace("%amount", item.Cost.ToString()).Replace("%balance", m_dicPlayersAndBalances[strSpeaker].ToString()), (int.Parse(payloadFields[1]) * 1).ToString(), "all");
-                                        }
-										commandsSuccessful++;
+                                        this.ExecuteCommand("procon.protected.send", "admin.yell", payloadFields[2].Replace("%buyer", strSpeaker).Replace("%target", BestMatchPlayerName(messageWords[1].Replace("%", " "))).Replace("%amount", item.Cost.ToString()).Replace("%balance", m_dicPlayersAndBalances[strSpeaker].ToString()), (int.Parse(payloadFields[1]) * 1).ToString(), "all");
+                                        commandsSuccessful++;
                                     }
 
                                     if (payloadFields[0].CompareTo("Growl") == 0)
@@ -3288,26 +3238,6 @@ v2.04 Final Release for BFBC2 (Dec. 30, 2010)</p>
                                             }
                                         }
                                     }
-									//RSP: Created a LogToFile action
-									if (payloadFields[0].CompareTo("LogToFile") == 0)
-                                    {
-									
-										string logName = payloadFields[1];
-										
-										// If this is a new file, add headers to first line 
-										if (!File.Exists(logName))
-										{
-											string logHeaders = "Date" + "," + "Time" + "," + "Player" + "," + "Command" + "," + "Item Cost"  + "," + "Player Balance" + Environment.NewLine;
-											File.WriteAllText(logName, logHeaders);
-										}
-
-
-										string strLogText = DateTime.Now.ToString("yyyy-MM-dd") + "," + DateTime.Now.ToString("hh:mm:ss") + "," + strSpeaker + "," + item.BuyCommand.ToLower() + "," + item.Cost + "," + m_dicPlayersAndBalances[strSpeaker] + Environment.NewLine;
-										
-										File.AppendAllText(logName, strLogText);					
-										commandsSuccessful++;
-                                    }
-
                                 }
 
                                 if (commandsSuccessful == item.Payload.Count)
@@ -3316,8 +3246,7 @@ v2.04 Final Release for BFBC2 (Dec. 30, 2010)</p>
 
                                     if (m_ebynSpamPluginConsole == enumBoolYesNo.Yes)
                                     {
-										//RSP:  She = He
-                                        this.ExecuteCommand("procon.protected.pluginconsole.write", m_strCurrencyInstanceName + ": " + strSpeaker + " just purchased a " + item.Name + " for " + item.Cost + " " + m_strCurrencySymbol + ". He has " + m_dicPlayersAndBalances[strSpeaker] + " " + m_strCurrencySymbol + " left.");
+                                        this.ExecuteCommand("procon.protected.pluginconsole.write", m_strCurrencyInstanceName + ": " + strSpeaker + " just purchased a " + item.Name + " for " + item.Cost + " " + m_strCurrencySymbol + ". She has " + m_dicPlayersAndBalances[strSpeaker] + " " + m_strCurrencySymbol + " left.");
                                     }
                                 }
                             }
