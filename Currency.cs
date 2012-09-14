@@ -2142,9 +2142,9 @@ v2.04 Final Release for BFBC2 (Dec. 30, 2010)</p>
                         }
                     }
 
-                    //RSP: Changed $command to @command, re-worded, added player's balance at the end.
+                    //RSP: Changed $command to @command, re-worded to fit on 1 line with player's balance at the end.
 					// this.ExecuteCommand("procon.protected.send", "admin.say", m_strCurrencyInstanceName + " shop: Type a @command to buy and use that item.", "player", strSpeaker);
-					this.ExecuteCommand("procon.protected.send", "admin.say", m_strCurrencyInstanceName + " shop: Type a @command to buy an item. Your balance: " + m_dicPlayersAndBalances[strSpeaker] + " " + m_strCurrencySymbol, "player", strSpeaker);
+					this.ExecuteCommand("procon.protected.send", "admin.say", "Type @command to buy an item. Balance: " + m_dicPlayersAndBalances[strSpeaker] + " " + m_strCurrencySymbol, "player", strSpeaker);
 					
                 }
 
